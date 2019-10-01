@@ -24,6 +24,39 @@ impl Rectangle {
 }
 
 fn main() {
+    struct User {
+        username: String,
+        email: String,
+        sign_in_count: u64,
+        active: bool,
+    }
+
+    let mut user1 = User {
+        email: String::from("clemado1@gmail.com");
+        username: String::from("clemado1");
+        active: true,
+        sign_in_count: 1,
+    };
+
+    user1.email = String::from("clemado12@gmail.com");
+
+    println!("my email is {}", user1.email);
+
+    let user2 = build_user("clemado2@gmail.com", "clemado2");
+
+    let user3 = User {
+        email: String::from("clemado3@gmail.com"),
+        username: String::from("clemado3"),
+        ..user1
+    };
+
+    // define structs that look similar to tuples, called tuple structs
+    struct Color(i32, i32, i32);
+    struct Point(i32, i32, i32);
+
+    let black = Color(0,0,0);
+    let origin = Point(0,0,0);
+
     let rect1 = Rectangle {
         width: 30,
         height: 50,
@@ -55,6 +88,15 @@ fn main() {
     println!("Can rect1 hold rect3? {}", rect1.can_hold(&rect3));
 
     let sq = Rectangle::square(3);
+}
+
+fn build_user(email: String, username:String) -> User {
+    User {
+        email,
+        username,
+        active: true,
+        sign_in_count: 1,
+    }
 }
 
 fn area(rectangle: &Rectangle) -> u32 {
