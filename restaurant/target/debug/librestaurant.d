@@ -1,0 +1,1 @@
+D:\rust-work\rust-exercise\restaurant\target\debug\librestaurant.rlib: D:\rust-work\rust-exercise\restaurant\src\front_of_house\hosting.rs D:\rust-work\rust-exercise\restaurant\src\front_of_house\serving.rs D:\rust-work\rust-exercise\restaurant\src\front_of_house.rs D:\rust-work\rust-exercise\restaurant\src\lib.rs
