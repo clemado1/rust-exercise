@@ -9,3 +9,7 @@ edition = "2018"
 [dependencies]
 
 rand = "0.4.0"
+
+[lib]
+name = "lib"
+path = "src/lib.rs"

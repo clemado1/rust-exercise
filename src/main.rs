@@ -24,6 +24,8 @@ impl<T, U> Point<T, U> {
     }
 }
 
+use ::lib::*;
+
 fn main() {
     let both_integer = Point { x: 5, y: 10 };
     let both_float = Point { x: 1.0, y: 4.0 };
@@ -42,4 +44,24 @@ fn main() {
     let p3 = p1.mixup(p2);
 
     println!("p3.x = {}, p3.y = {}", p3.x, p3.y);
+
+    let tweet = Tweet {
+        username: String::from("horse_ebook"),
+        content: String::from("of course, as you probably already know, people"),
+        reply: false,
+        retweet: false,
+    };
+    println!("1 new Tweet, {}", tweet.summarize());
+
+    let article = NewsArticle {
+        headline: String::from("Penguins win the Stanley Cup Championship!"),
+        location: String::from("Pittsburgh, PA, USA"),
+        author: String::from("Iceburgh"),
+        content: String::from(
+            "The Pittsburgh Penguins once again are the best
+        hockey team in the NHL.",
+        ),
+    };
+
+    println!("New article available! {}", article.summarize());
 }
