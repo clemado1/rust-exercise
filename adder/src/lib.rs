@@ -26,6 +26,14 @@ impl Guess {
     }
 }
 
+fn prints_and_returns_10(a: i32) -> i32 {
+    println!("I got the value {}", a);
+    10
+}
+
+fn internal_addr(a: i32, b:i32) -> i32 {
+    a+b
+}
 
 #[cfg(test)]
 mod tests {
@@ -85,6 +93,19 @@ mod tests {
         } else {
             Err(String::from("two plus two does not equal four"))
         }
+    }
+
+    #[test]
+    fn this_test_will_pass(){
+        let value = prints_and_returns_10(4);
+        assert_eq!(10, value);
+    }
+
+    #[test]
+    #[ignore]
+    fn this_test_will_fail(){
+        let value = prints_and_returns_10(8);
+        assert_eq!(5, value);
     }
 }
 
