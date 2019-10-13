@@ -1,78 +1,101 @@
-pub trait Summary {
-    fn summarize_author(&self) -> String;
+use std::env;
+use std::error::Error;
+use std::fs;
 
-    fn summarize(&self) -> String {
-        format!("(Read more from {}...)", self.summarize_author())
+pub struct Config {
+    pub query: String,
+    pub filename: String,
+    pub case_sensitive: bool,
+}
+
+impl Config {
+    pub fn new(args: &[String]) -> Result<Config, &'static str> {
+        if args.len() < 3 {
+            return Err("not enough arguments");
+        }
+
+        let query = args[1].clone();
+        let filename = args[2].clone();
+
+        let case_sensitive = env::var("CASE_INSENSITIVE").is_err();
+
+        Ok(Config {
+            query,
+            filename,
+            case_sensitive,
+        })
     }
 }
 
-pub struct NewsArticle {
-    pub headline: String,
-    pub location: String,
-    pub author: String,
-    pub content: String,
-}
+//the function will return a type that implements the Error trait
+pub fn run(config: Config) -> Result<(), Box<dyn Error>> {
+    let contents = fs::read_to_string(config.filename)?;
 
-impl Summary for NewsArticle {
-    fn summarize_author(&self) -> String {
-        format!("@{}", self.author)
+    let results = if config.case_sensitive {
+        search(&config.query, &contents)
+    } else {
+        search_case_insensitive(&config.query, &contents)
+    };
+
+    for line in results {
+        println!("{}", line);
     }
+
+    Ok(())
 }
 
-pub struct Tweet {
-    pub username: String,
-    pub content: String,
-    pub reply: bool,
-    pub retweet: bool,
-}
+pub fn search<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let mut results = Vec::new();
 
-impl Summary for Tweet {
-    fn summarize_author(&self) -> String {
-        format!("@{}", self.username)
+    for line in contents.lines() {
+        if line.contains(query) {
+            results.push(line);
+        }
     }
-    /*
-    fn summarize(&self) -> String {
-        format!("{}: {}", self.username, self.content)
+
+    results
+}
+
+pub fn search_case_insensitive<'a>(query: &str, contents: &'a str) -> Vec<&'a str> {
+    let query = query.to_lowercase();
+    let mut results = Vec::new();
+
+    for line in contents.lines() {
+        if line.to_lowercase().contains(&query) {
+            results.push(line);
+        }
     }
-    */
+
+    results
 }
 
-pub fn notify(item: impl Summary, item2: impl Summary) {
-    println!("Breaking news! {}", item.summarize());
-}
+mod tests {
+    use super::*;
 
-pub fn notify2<T: Summary>(item: T, item2: T) {
-    println!("Breaking news! {}", item.summarize());
-}
+    #[test]
+    fn case_sensitive() {
+        let query = "duct";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Duct tape.";
 
-use std::fmt::Debug;
-use std::fmt::Display;
+        assert_eq!(vec!["safe, fast, productive."], search(query, contents));
+    }
 
-pub fn notify3(item: impl Summary + Display) {
-    println!("Breaking news! {}", item.summarize());
-}
+    #[test]
+    fn case_insensitive() {
+        let query = "rUsT";
+        let contents = "\
+Rust:
+safe, fast, productive.
+Pick three.
+Trust me.";
 
-pub fn notify4<T: Summary + Display>(item: T) {
-    println!("Breaking news! {}", item.summarize());
-}
-
-pub fn some_function<T: Display + Clone, U: Clone + Debug>(t: T, u: U) -> i32 {
-    32
-}
-
-pub fn some_function2<T, U>(t: T, u: U) -> i32
-where
-    T: Display + Clone,
-    U: Clone + Debug,
-{
-    32
-}
-
-pub fn return_summarizable() -> impl Summary {
-    Tweet {
-        username: String::from("horse_ebook"),
-        content: String::from("of course, as you probably already know, people"),
-        reply: false,
-        retweet: false,
+        assert_eq!(
+            vec!["Rust:", "Trust me."],
+            search_case_insensitive(query, contents)
+        );
     }
 }

@@ -44,7 +44,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "rust-exercise"
+name = "rust_exercise"
 version = "0.1.0"
 dependencies = [
  "rand 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
