@@ -6,6 +6,10 @@ version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "gui"
+version = "0.1.0"
+
+[[package]]
 name = "libc"
 version = "0.2.62"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -47,6 +51,7 @@ dependencies = [
 name = "rust_exercise"
 version = "0.1.0"
 dependencies = [
+ "gui 0.1.0",
  "rand 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 

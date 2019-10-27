@@ -1,78 +1,73 @@
-pub trait Messenger {
-    fn send(&self, msg: &str);
+pub struct AverageCollection {
+    list: Vec<i32>,
+    average: f64,
 }
 
-pub struct LimitTracker<'a, T: Messenger> {
-    messenger: &'a T,
-    value: usize,
-    max: usize,
-}
-
-impl<'a, T> LimitTracker<'a, T>
-where
-    T: Messenger,
-{
-    pub fn new(messenger: &T, max: usize) -> LimitTracker<T> {
-        LimitTracker {
-            messenger,
-            value: 0,
-            max,
-        }
+impl AverageCollection {
+    pub fn add(&mut self, value: i32) {
+        self.list.push(value);
+        self.update_average();
     }
 
-    pub fn set_value(&mut self, value: usize) {
-        self.value = value;
-
-        let percentage_of_max = self.value as f64 / self.max as f64;
-
-        if percentage_of_max >= 1.0 {
-            self.messenger.send("Error: You are over your quota!");
-        } else if percentage_of_max >= 0.9 {
-            self.messenger
-                .send("Urgent warning: You've used up over 90% of your quota!");
-        } else if percentage_of_max >= 0.75 {
-            self.messenger
-                .send("Warning: You've used up over 75% of your quota!");
-        }
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    use std::cell::RefCell;
-
-    struct MockMessenger {
-        sent_messages: RefCell<Vec<String>>,
-    }
-
-    impl MockMessenger {
-        fn new() -> MockMessenger {
-            MockMessenger {
-                sent_messages: RefCell::new(vec![]),
+    pub fn remove(&mut self) -> Option<i32> {
+        let result = self.list.pop();
+        match result {
+            Some(value) => {
+                self.update_average();
+                Some(value)
             }
+            None => None,
         }
     }
 
-    impl Messenger for MockMessenger {
-        fn send(&self, message: &str) {
-            let mut one_borrow = self.sent_messages.borrow_mut();
-            let mut two_borrow = self.sent_messages.borrow_mut();
+    pub fn average(&self) -> f64 {
+        self.average
+    }
 
-            one_borrow.push(String::from(message));
-            two_borrow.push(String::from(message));
+    fn update_average(&mut self) {
+        let total: i32 = self.list.iter().sum();
+        self.average = total as f64 / self.list.len() as f64;
+    }
+}
 
-            self.sent_messages.borrow_mut().push(String::from(message));
+pub trait Draw {
+    fn draw(&self);
+}
+
+pub struct Screen {
+    pub components: Vec<Box<dyn Draw>>,
+}
+
+impl Screen {
+    pub fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
         }
     }
+}
 
-    #[test]
-    fn it_sends_an_over_75_percent_warning_message() {
-        let mock_messenger = MockMessenger::new();
-        let mut limit_tracker = LimitTracker::new(&mock_messenger, 100);
+//하나의 타입으로만 대입
+pub struct Screen2<T: Draw> {
+    pub components: Vec<T>,
+}
 
-        limit_tracker.set_value(80);
-
-        assert_eq!(mock_messenger.sent_messages.borrow().len(), 1);
+impl<T> Screen2<T>
+where
+    T: Draw,
+{
+    pub fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
     }
+}
+
+pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&self) {}
 }
