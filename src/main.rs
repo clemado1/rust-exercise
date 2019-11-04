@@ -22,6 +22,12 @@ pub trait Write {
     fn write_fmt(&mut self, fmt: fmt::Arguments) -> Result<()>;
 }
 
+#[derive(Debug)]
+enum Status {
+    Value(u32),
+    Stop,
+}
+
 fn main() {
     type kilometers = i32;
 
@@ -45,6 +51,19 @@ fn main() {
     }
 
     //let s1: str = "Hello there!";
+
+    let answer = do_twice(add_one, 5);
+
+    println!("The answer is: {}", answer);
+
+    let list_of_numbers = vec![1, 2, 3];
+    let list_of_strings: Vec<String> = list_of_numbers.iter().map(|i| i.to_string()).collect();
+    let list_of_strings2: Vec<String> = list_of_numbers.iter().map(ToString::to_string).collect();
+
+    let list_of_statuses: Vec<Status> = (0u32..20).map(Status::Value).collect();
+    for status in list_of_statuses {
+        println!("{:?}", status);
+    }
 }
 
 fn takes_long_type(f: Box<dyn Fn() + Send + 'static>) {}
@@ -59,4 +78,22 @@ fn bar() -> ! {
     loop {
         println!("forever");
     }
+}
+
+fn add_one(x: i32) -> i32 {
+    x + 1
+}
+
+fn do_twice(f: fn(i32) -> i32, arg: i32) -> i32 {
+    f(arg) + f(arg)
+}
+
+/*
+fn return_closure() -> Fn(i32) -> i32 {
+    |x| x + 1
+}
+*/
+
+fn return_closure() -> Box<dyn Fn(i32) -> i32> {
+    Box::new(|x| x + 1)
 }
