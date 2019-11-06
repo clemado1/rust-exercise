@@ -1,0 +1,1 @@
+C:\Users\clemado1\Documents\rust-exercise\pancakes\target\debug\pancakes.exe: C:\Users\clemado1\Documents\rust-exercise\hello_macro\hello_macro_derive\src\lib.rs C:\Users\clemado1\Documents\rust-exercise\hello_macro\src\lib.rs C:\Users\clemado1\Documents\rust-exercise\pancakes\src\main.rs
