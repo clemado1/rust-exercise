@@ -1,73 +1,21 @@
-pub struct AverageCollection {
-    list: Vec<i32>,
-    average: f64,
-}
-
-impl AverageCollection {
-    pub fn add(&mut self, value: i32) {
-        self.list.push(value);
-        self.update_average();
-    }
-
-    pub fn remove(&mut self) -> Option<i32> {
-        let result = self.list.pop();
-        match result {
-            Some(value) => {
-                self.update_average();
-                Some(value)
-            }
-            None => None,
+#[macro_export]
+macro_rules! vec {
+    ( $($x: expr), *) => {
+        {
+            let mut temp_vec = Vec::new();
+            $(
+                temp_vec.push($x);
+            )*
+            temp_vec
         }
-    }
-
-    pub fn average(&self) -> f64 {
-        self.average
-    }
-
-    fn update_average(&mut self) {
-        let total: i32 = self.list.iter().sum();
-        self.average = total as f64 / self.list.len() as f64;
-    }
+    };
 }
 
-pub trait Draw {
-    fn draw(&self);
-}
+/*
+use proc_macro;
 
-pub struct Screen {
-    pub components: Vec<Box<dyn Draw>>,
-}
+#[some_attribute]
+pub fn som_name(input: TokenStream) -> TokenStream {
 
-impl Screen {
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
 }
-
-//하나의 타입으로만 대입
-pub struct Screen2<T: Draw> {
-    pub components: Vec<T>,
-}
-
-impl<T> Screen2<T>
-where
-    T: Draw,
-{
-    pub fn run(&self) {
-        for component in self.components.iter() {
-            component.draw();
-        }
-    }
-}
-
-pub struct Button {
-    pub width: u32,
-    pub height: u32,
-    pub label: String,
-}
-
-impl Draw for Button {
-    fn draw(&self) {}
-}
+*/
