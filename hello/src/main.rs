@@ -1,3 +1,11 @@
+/* TO-DO:
+Add more documentation to ThreadPool and its public methods.
+Add tests of the library’s functionality.
+Change calls to unwrap to more robust error handling.
+Use ThreadPool to perform some task other than serving web requests.
+Find a thread pool crate on crates.io and implement a similar web server using the crate instead. Then compare its API and robustness to the thread pool we implemented.
+*/
+
 use std::fs;
 use std::io::prelude::*;
 use std::net::TcpListener;
@@ -14,7 +22,7 @@ fn main() {
         Err(e) => panic!(e),
     };
 
-    for stream in listener.incoming() {
+    for stream in listener.incoming().take(2) {
         let stream = stream.unwrap();
 
         //thread::spawn(|| { handle_connection(stream);});
@@ -22,6 +30,8 @@ fn main() {
             handle_connection(stream);
         })
     }
+
+    println!("Shutting down");
 }
 
 fn handle_connection(mut stream: TcpStream) {
@@ -62,5 +72,5 @@ fn handle_connection(mut stream: TcpStream) {
     }
     */
 
-    println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+    //println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 }
