@@ -74,6 +74,5 @@ fn handle_connection(mut stream: TcpStream) {
         stream.flush().unwrap();
     }
     */
-
     //println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
 }
