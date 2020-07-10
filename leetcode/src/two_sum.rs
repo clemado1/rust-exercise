@@ -9,8 +9,6 @@ fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
         let alpha = idx + 1;
         match nums[alpha..].iter().position(|&x| x == target - num) {
             Some(n) => {
-                println!("{}", idx);
-                println!("{}", n);
                 array.push(idx as i32);
                 array.push((n + alpha) as i32);
 
