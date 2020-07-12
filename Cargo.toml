@@ -15,5 +15,5 @@ blog = {path = "./blog" }
 [workspace]
 
 members = [
-    "gui",
+    "gui", "leetcode"
 ]
