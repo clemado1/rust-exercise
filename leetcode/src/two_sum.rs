@@ -20,3 +20,18 @@ fn two_sum(nums: Vec<i32>, target: i32) -> Vec<i32> {
 
     array
 }
+
+fn convert2(s: String, num_rows: i32) -> String {
+    let mut zigzags: Vec<_> = (0..num_rows)
+        .chain((1..num_rows-1).rev())
+        .cycle()
+        .zip(s.chars())
+        .collect();
+
+    println!("{:?}", zigzags);
+
+    zigzags.sort_by_key(|&(row, _)| row);
+    zigzags.into_iter()
+        .map(|(_, c)| c)
+        .collect()
+}
