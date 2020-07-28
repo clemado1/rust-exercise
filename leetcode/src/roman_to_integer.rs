@@ -1,7 +1,5 @@
 fn main() {
-
-    println!("{}",roman_to_int("MCMXCIV".to_string()));
-
+    println!("{}", roman_to_int("MCMXCIV".to_string()));
 }
 
 fn roman_to_int(s: String) -> i32 {
@@ -17,14 +15,14 @@ fn roman_to_int(s: String) -> i32 {
             'C' => 100,
             'D' => 500,
             'M' => 1000,
-            _ => 0
+            _ => 0,
         };
 
         sum += rom;
 
         if pre < rom {
             sum -= 2 * pre;
-        } 
+        }
 
         pre = rom;
     }
