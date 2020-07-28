@@ -1,5 +1,9 @@
 fn main() {
-    println!("{}", int_to_roman(3999));
+    println!("{}", int_to_roman(3));
+    println!("{}", int_to_roman(4));
+    println!("{}", int_to_roman(9));
+    println!("{}", int_to_roman(58));
+    println!("{}", int_to_roman(1994));
 }
 
 fn int_to_roman(num: i32) -> String {
@@ -23,7 +27,7 @@ fn int_to_roman(num: i32) -> String {
         } 
 
         if m_num + grd >= dis {
-            result += rom_list[idx+1+((idx+1)/2)];
+            result += rom_list[idx+1+((idx+1)%2)];
             result += rom;
 
             m_num -= (m_num / grd) * grd ;
@@ -35,9 +39,6 @@ fn int_to_roman(num: i32) -> String {
         } else {
             dis /= 5;
         }
-
-        println!("{}", m_num);
-        println!("{}", result);
 
     }
 
