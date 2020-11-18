@@ -1,5 +1,6 @@
 pub mod gen_range;
 pub mod combi;
+pub mod company;
 
 pub struct RangeIterator {
     curr: i32,
