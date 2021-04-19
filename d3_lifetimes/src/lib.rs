@@ -1,4 +1,5 @@
 mod v3_rc;
+mod v4_channels;
 
 #[cfg(test)]
 mod tests {
