@@ -20,6 +20,10 @@ path="src/v3_rc.rs"
 name="v4_channels"
 path="src/v4_channels.rs"
 
+[[bin]]
+name="v5_pool"
+path="src/v5_pool.rs"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
