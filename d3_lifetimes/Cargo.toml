@@ -24,7 +24,13 @@ path="src/v4_channels.rs"
 name="v5_pool"
 path="src/v5_pool.rs"
 
+[[bin]]
+name="v6_rayon"
+path="src/v6_rayon.rs"
+
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+
+rayon = "1.0.3"
