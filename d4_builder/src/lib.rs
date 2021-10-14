@@ -1,3 +1,5 @@
+mod card;
+
 use std::fmt::Display;
 
 #[derive(Debug, PartialEq)]
