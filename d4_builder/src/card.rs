@@ -6,7 +6,7 @@ pub enum Ability {
     Taunt,
 }
 
-#[derive(Debug, PartialEq, PartialOrd, Ord, Eq)]
+#[derive(Debug, PartialEq, PartialOrd, Ord, Eq, Clone, Copy)]
 pub enum Trigger {
     BattleCry,
     Death,
@@ -93,6 +93,27 @@ impl Card {
     }
 }
 
+pub trait Triggerable {
+    fn trigger(&self, t: Trigger) -> Option<String>;
+}
+
+impl Triggerable for Card {
+    fn trigger(&self, t: Trigger) -> Option<String> {
+        self.triggers.get(&t).map(|s| s.to_string())
+    }
+}
+
+pub struct TriggerWrap<A: Triggerable, B: Triggerable> {
+    a: A,
+    b: B,
+}
+
+impl <A: Triggerable, B: Triggerable> Triggerable for TriggerWrap<A, B> {
+    fn trigger(&self, t: Trigger) -> Option<String> {
+        self.a.trigger(t).or_else(|| self.b.trigger(t))
+    }
+}
+
 #[cfg(test)]
 mod test_builder {
     use super::*;
@@ -135,5 +156,15 @@ mod test_builder {
         };
 
         assert_eq!(c1, c2);
+    }
+
+    #[test]
+    pub fn test_trigger_wrap() {
+        let c1 = Card::build("c1".to_string()).trigger(Trigger::BattleCry, "Cry Battle".to_string()).build();
+        let c2 = Card::build("c2".to_string()).trigger(Trigger::Death, "Say Ah".to_string()).build();
+
+        let wrap = TriggerWrap {a: c1, b: c2};
+        assert_eq!(wrap.trigger(Trigger::BattleCry).unwrap(), "Cry Battle");
+        assert_eq!(wrap.trigger(Trigger::Death).unwrap(), "Say Ah");
     }
 }
