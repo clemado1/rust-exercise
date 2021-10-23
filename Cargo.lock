@@ -119,6 +119,13 @@ dependencies = [
 [[package]]
 name = "d4_builder"
 version = "0.1.0"
+dependencies = [
+ "d4_builder_derive",
+]
+
+[[package]]
+name = "d4_builder_derive"
+version = "0.1.0"
 
 [[package]]
 name = "either"
